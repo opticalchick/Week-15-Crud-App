@@ -1,13 +1,28 @@
-import React, { Component } from 'react';
-import { UsersList } from './Components/UsersList';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import UsersList from './Components/UsersList.js';
+import Nav from './Components/Nav.js';
+import CreateUser from './Components/CreateUser.js';
+import EditUser from './Components/EditUser.js';
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <UsersList props={{ test: data }} />
-      </div>
-    )
-  }
+
+function App() {
+  return (
+    <div>
+      <Nav />
+      <Router>
+        <Routes>
+          <Route path="/" element={< UsersList />} />
+          <Route path="/create" element={<CreateUser />} />
+          <Route path="/edit/:id" element={<EditUser />} />
+          <Route path="/delete/:id" element={<CreateUser />} />{" "}
+        </Routes>
+      </Router>
+    </div>
+  );
 }
+
+export default App;
+
+

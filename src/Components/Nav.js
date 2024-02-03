@@ -1,10 +1,11 @@
-import React from "react";
-export default function Navigate() {
+import '../App.css'
+
+function Nav() {
     return (
-        <nav class="flex items-center justify-between flex-wrap bg-aqua-500 p-6">
-            <div class="flex items-center flex-shrink-0 text-white mr-6">
-                <span class="font-semibold text-xl tracking-tight">REACT CRUD APP</span>
-            </div>
+        <nav className='Nav'>
+            <div className='container'>Phone Book App</div>
         </nav>
     )
 }
+
+export default Nav;
