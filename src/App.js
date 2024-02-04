@@ -5,6 +5,7 @@ import Nav from './Components/Nav.js';
 import CreateUser from './Components/CreateUser.js';
 import EditUser from './Components/EditUser.js';
 import './App.css';
+import Footer from './Components/Footer.js';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/delete/:id" element={<CreateUser />} />{" "}
         </Routes>
       </Router>
+      <Footer />
     </div>
   );
 }

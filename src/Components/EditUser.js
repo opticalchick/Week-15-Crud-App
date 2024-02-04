@@ -7,6 +7,9 @@ const EditUser = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
 
+    // Sends GET/Read request to API and returns user's details with their unique Id
+    // consoles error with message if API call is unsuccessful
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -21,6 +24,9 @@ const EditUser = () => {
 
         fetchUserDetails();
     }, [id]);
+
+    //  Sends PUT/Update request with updated info to API.  Will log errors to console if
+    // unsuccessful.
 
     const handleUpdateUser = async (updatedData) => {
         console.log('Checking for updated information', updatedData);

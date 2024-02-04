@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLinkClickHandler } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
-import { Button, Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.css';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 
 function UsersList() {
@@ -17,6 +18,9 @@ function UsersList() {
     const [editPhone, setEditPhone] = useState('');
     const [showEditForm, setShowEditForm] = useState(false);
 
+
+    // Gets users information from API and returns it.  If there is an error thrown,
+    // it will log to the console with the error.
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -32,6 +36,7 @@ function UsersList() {
         fetchUsers();
     }, []);
 
+    // Create new instance of a User, taking in all of the required fields
     const handleCreateUser = async () => {
         try {
             if (!firstName || !lastName || !phone) {
@@ -46,7 +51,7 @@ function UsersList() {
             };
 
             console.log('New User:', newUser);
-
+            // Sends data with post request to API, then sends another get request for updated list
             await axios.post('https://65bbf6c152189914b5bd6a9e.mockapi.io/users',
                 newUser
             );
@@ -66,7 +71,7 @@ function UsersList() {
             }
         }
     };
-
+    // This is sends a delete request to API, then another get to repopulate the list
     const handleDeleteUser = async (id) => {
         try {
             await axios.delete(`https://65bbf6c152189914b5bd6a9e.mockapi.io/users/${id}`);
@@ -81,6 +86,8 @@ function UsersList() {
             }
         }
     };
+
+    // When edit button is clicked, edit form shows, and pulls in current data
     const handleEditUser = (user) => {
         setEditUserId(user.id);
         setEditLastName(user.lastName);
@@ -90,6 +97,8 @@ function UsersList() {
         setShowEditForm(true);
     };
 
+    // This handles the user edit, sends PUT request, then another GET 
+    // for user list, then hides the form again.
     const handleUpdateUser = async () => {
         try {
             if (
@@ -127,63 +136,67 @@ function UsersList() {
         }
     };
 
-
+    // Container for create/edit forms and user data rendered in a table.  The editFormContainer
+    //only shows when the 'edit' button is clicked in the userTable
     return (
         <div className='UsersListContainer'>
-            <h2 className='PhoneList'>Phone List</h2>
+            <h2 className='PhoneList'>Add New Entry</h2><br></br>
             {showEditForm && (
                 <div className='editFormContainer'>
-                    <h3>Edit User</h3>
-                    <Form.Group>
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control
-                            type='text'
-                            value={editLastName}
-                            onChange={(e) => setEditLastName(e.target.value)} />
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control
-                            type='text'
-                            value={editFirstName}
-                            onChange={(e) => setEditFirstName(e.target.value)} />
-                        <Form.Label>Phone Number</Form.Label>
-                        <Form.Control
-                            type='tel'
-                            value={editPhone}
-                            onChange={(e) => setEditPhone(e.target.value)} />
-                        <button className='editButton' type='button'
-                            onClick={handleUpdateUser}>Update User</button>
-                    </Form.Group>
+                    <Form>
+                        <InputGroup className='mb-3'>
+                            <InputGroup.Text>Last Name</InputGroup.Text>
+                            <Form.Control
+                                type='text'
+                                value={editLastName}
+                                onChange={(e) => setEditLastName(e.target.value)} />
+                            <InputGroup.Text>First Name</InputGroup.Text>
+                            <Form.Control
+                                type='text'
+                                value={editFirstName}
+                                onChange={(e) => setEditFirstName(e.target.value)} />
+                        </InputGroup>
+                        <InputGroup className='mb-3'>
+                            <InputGroup.Text>Phone Number</InputGroup.Text>
+                            <Form.Control
+
+                                type='tel'
+                                value={editPhone}
+                                onChange={(e) => setEditPhone(e.target.value)} />
+                            <button className='btn btn-info editUser' type='button'
+                                onClick={handleUpdateUser}>Update User</button>
+                        </InputGroup>
+                    </Form>
                 </div>
-            )}
-            <div>
-                <Form.Group>
-                    <div className='form-group mb-2'>
-                        <Form.Label>Last Name:</Form.Label>
+            )}<br></br>
+            <div className='CreateFormContainer'>
+                <Form>
+                    <InputGroup className='mb-3'>
+                        <InputGroup.Text>Last Name:</InputGroup.Text>
                         <Form.Control
                             type='text'
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)} />
-                    </div>
-                    <div className='form-group mx-sm-3 mb-2'>
-                        <Form.Label>First Name:</Form.Label>
+
+                        <InputGroup.Text>First Name:</InputGroup.Text>
                         <Form.Control
                             type='text'
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)} />
-                    </div>
-                    <div className='col'>
-                        <Form.Label>Phone Number:</Form.Label>
+                    </InputGroup>
+                    <InputGroup className='mb-3'>
+                        <InputGroup.Text>Phone Number:</InputGroup.Text>
                         <Form.Control
                             type='tel'
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)} />
-                    </div><br></br>
-                    <button type='button' className='btn btn-primary' onClick={handleCreateUser}>Create New User</button>
-
-                </Form.Group>
-
-                <h2>Phone number List</h2>
-                <table className='userTable'>
+                        <button type='button' className='btn btn-primary' onClick={handleCreateUser}>Create New User</button>
+                    </InputGroup>
+                </Form><br></br><br></br>
+            </div>
+            <h2 className='text-center'>Phone number List</h2>
+            <div className='userTable'>
+                <table className='table table-dark table-striped table-bordered table-hover table-sm'>
                     <thead>
                         <tr>
                             <th>Last Name</th>
@@ -199,9 +212,9 @@ function UsersList() {
                                 <td>{user.firstName}</td>
                                 <td>{user.phone}</td>
                                 <td>
-                                    <button className='btn btn-info' onClick={() => handleEditUser(user)}>
+                                    <button className='editButton btn btn-info' onClick={() => handleEditUser(user)}>
                                         Edit</button>
-                                    <button className='btn btn-danger' onClick={() =>
+                                    <button className='deleteButton btn btn-danger' onClick={() =>
                                         handleDeleteUser(user.id)}>Delete</button>
 
                                 </td>
@@ -210,8 +223,8 @@ function UsersList() {
                     </tbody>
                 </table>
             </div>
+        </div>
 
-        </div >
     );
 };
 

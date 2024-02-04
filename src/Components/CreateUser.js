@@ -13,6 +13,8 @@ const CreateUser = () => {
         fetchUsers();
     }, []);
 
+    // Sends post request to API and awaits response.  Error will log in the console, if there is one.
+
     const fetchUsers = async () => {
         try {
             const response = await axios.get(
@@ -23,6 +25,8 @@ const CreateUser = () => {
             console.error('Error getting users:', error.message);
         }
     };
+
+    // Creates new user by sending data to API in POST.  Then runs fetchUsers for GET request from API
 
     const handleCreateUser = async () => {
         try {
@@ -56,6 +60,8 @@ const CreateUser = () => {
             }
         }
     };
+
+    // populates new user with data input and populates to user table
 
     return (
         <div>
